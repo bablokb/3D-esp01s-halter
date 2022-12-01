@@ -13,6 +13,7 @@ include <dimensions.scad>
 
 d_base = d_innen + 2*w_glas;
 h_base = 0.6;
+h_wall = 20;
 
 module base() {
   cylinder(d=d_base,h=h_base,anchor=BOTTOM+CENTER);
@@ -24,6 +25,10 @@ module halter() {
   translate([-(d_base-x_pcb)/2+w_glas,0,h_base]) 
       rect_tube(size=[x_pcb+2*w2,y_pcb+2*w2],
                 h=h_pcb,wall=w2,anchor=BOTTOM+CENTER);
+}
+
+module wall() {
+  tube(od=d_innen-4*w06,wall=w2,h=h_wall,anchor=BOTTOM+CENTER);
 }
 
 module fase(richt="POS") {
@@ -44,8 +49,9 @@ difference() {
   union() {
     base();
     halter();
+    wall();
     translate([-(d_base-x_pcb)/2+w_glas,-(y_pcb)/2,h_base+h_pcb]) fase("POS");
     translate([-(d_base-x_pcb)/2+w_glas,+(y_pcb)/2,h_base+h_pcb]) fase("NEG");
   }
-  translate([-d_base/2+w_glas/2,0,h_base]) cuboid([3*w_glas,y_pcb,h_pcb+w2+fuzz],anchor=BOTTOM+CENTER);
+  translate([-d_base/2+w_glas/2,0,h_base]) cuboid([4*w_glas,y_pcb,h_wall+h_pcb+w2+fuzz],anchor=BOTTOM+CENTER);
 } 
